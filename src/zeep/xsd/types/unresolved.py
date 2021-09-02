@@ -1,3 +1,5 @@
+import sys
+
 from zeep.xsd.types.base import Type
 from zeep.xsd.types.collection import UnionType  # FIXME
 from zeep.xsd.types.simple import AnySimpleType  # FIXME
@@ -27,7 +29,7 @@ class UnresolvedCustomType(Type):
     def __init__(self, qname, base_type, schema):
         assert qname is not None
         self.qname = qname
-        self.name = str(qname.localname)
+        self.name = self._name()
         self.schema = schema
         self.base_type = base_type
 
@@ -37,6 +39,12 @@ class UnresolvedCustomType(Type):
             self.qname.text,
             self.base_type,
         )
+
+    def _name(self):
+        if sys.version_info >= (3, 0):
+            return self.qname.localname
+
+        return str(self.qname.localname)
 
     def resolve(self):
         base = self.base_type
