@@ -1,4 +1,4 @@
-import sys
+import six
 
 from zeep.xsd.types.base import Type
 from zeep.xsd.types.collection import UnionType  # FIXME
@@ -41,7 +41,7 @@ class UnresolvedCustomType(Type):
         )
 
     def _name(self):
-        if sys.version_info >= (3, 0):
+        if six.PY3:
             return self.qname.localname
 
         return str(self.qname.localname)
